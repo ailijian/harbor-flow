@@ -263,19 +263,19 @@ jobs:
     name: 发布到PyPI
     runs-on: ubuntu-latest
     needs: [validate-version, create-release]
-    if: needs.validate-version.outputs.is_prerelease == 'false' && secrets.PYPI_API_TOKEN == ''
+    if: ${{ needs.validate-version.outputs.is_prerelease == 'false' && (secrets.PYPI_API_TOKEN == '') }}
     environment:
       name: pypi
-      url: https://pypi.org/p/harborflow
+      url: https://pypi.org/project/harborflow
     permissions:
       id-token: write
+    continue-on-error: true
     steps:
       - name: 下载构建产物
         uses: actions/download-artifact@v4
         with:
           name: dist-packages
           path: dist/
-          
       - name: 发布到PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         # 使用 Trusted Publishing，不需要 repository-url
@@ -284,10 +284,10 @@ jobs:
     name: 发布到PyPI（令牌回退）
     runs-on: ubuntu-latest
     needs: [validate-version, create-release]
-    if: needs.validate-version.outputs.is_prerelease == 'false' && secrets.PYPI_API_TOKEN != ''
+    if: ${{ needs.validate-version.outputs.is_prerelease == 'false' && (secrets.PYPI_API_TOKEN != '') }}
     environment:
       name: pypi
-      url: https://pypi.org/p/harborflow
+      url: https://pypi.org/project/harborflow
     steps:
       - name: 下载构建产物
         uses: actions/download-artifact@v4
@@ -307,7 +307,7 @@ jobs:
     if: needs.validate-version.outputs.is_prerelease == 'true'
     environment:
       name: testpypi
-      url: https://test.pypi.org/p/harborflow
+      url: https://test.pypi.org/project/harborflow
     permissions:
       id-token: write
     steps:
@@ -327,7 +327,7 @@ jobs:
     name: 部署文档
     runs-on: ubuntu-latest
     needs: [validate-version, create-release]
-    if: needs.validate-version.outputs.is_prerelease == 'false' && hashFiles('mkdocs.yml') != ''
+    if: ${{ needs.validate-version.outputs.is_prerelease == 'false' && hashFiles('mkdocs.yml') != '' }}
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
