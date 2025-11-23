@@ -1,0 +1,37 @@
+# HarborFlow Development Diary
+
+- Date: 2025-11-21
+- Type: feature
+- Modules: `harborflow/types.py`, `harborflow/decorators.py`, `harborflow/compile.py`, `harborflow/__init__.py`
+- Summary: 引入核心骨架与公共 API，建立最小可用版本与示例/测试。
+- Reason: 对齐《harbor-flow实现设计 V1.0.0.md》，提供声明式图编排的基础能力。
+- Changes:
+  - 定义 `Route` 与 `END` 二次导出，补充基础异常类型。
+  - 提供 `@node` 与 `@graph` 装饰器、`GraphConfig` 并注入 `compile()`。
+  - 实现 `compile_graph`：节点收集、返回值适配、顺序链与 START/END。
+  - 添加最小示例 `examples/simple_chat.py` 与单测 `tests/test_types.py`、`tests/test_compile.py`。
+- Breaking: 否
+- Related: N/A
+
+- Date: 2025-11-21
+- Type: chore
+- Modules: `harborflow/compile.py`, `harborflow/decorators.py`
+- Summary: 为 `compile_graph` 增加 `check` 形参并在 Docstring 对齐契约；补充 `graph` Docstring 说明透传。
+- Reason: 与设计文档的 API 形签一致，预留校验开关，保持当前行为等价。
+- Changes:
+  - `compile_graph(flow_instance, *, check: bool = True, **compile_options)` 签名更新；Docstring 增补 `check` 说明。
+  - `graph` Docstring 增补：注入的 `compile(self, **options)` 透传到 `compile_graph`，包含 `check`。
+- Breaking: 否
+- Related: N/A
+- Date: 2025-11-21
+- Type: chore
+- Modules: `tests/test_compile.py`, `tests/test_types.py`, `tests/conftest.py`, `requirements.txt`, `pyproject.toml`
+- Summary: 扩充 Command 与 with_update 的集成测试，并声明依赖以保障本地/CI一致。
+- Reason: 提高行为覆盖与稳定性，确保开发与CI环境一致安装运行。
+- Changes:
+  - 扩充 `tests/test_compile.py`：新增 `test_command_direct_return` 与 `test_route_with_update_chain`。
+  - 添加 `tests/conftest.py`：在未安装 `langgraph` 时跳过测试并设置项目根路径。
+  - 添加 `requirements.txt`：声明 `langgraph>=1.0.0` 与 `pytest>=7.0.0`。
+  - 添加 `pyproject.toml`：声明项目基础信息与依赖（PEP 621）。
+- Breaking: 否
+- Related: N/A

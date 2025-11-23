@@ -1,0 +1,15 @@
+[project]
+name = "harborflow"
+version = "0.1.0"
+description = "HarborFlow: Declarative graph orchestration atop LangGraph"
+requires-python = ">=3.9"
+dependencies = [
+  "langgraph>=1.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["harborflow*"]
