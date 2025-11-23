@@ -263,7 +263,7 @@ jobs:
     name: 发布到PyPI
     runs-on: ubuntu-latest
     needs: [validate-version, create-release]
-    if: ${{ needs.validate-version.outputs.is_prerelease == 'false' && (secrets.PYPI_API_TOKEN == '') }}
+    if: needs.validate-version.outputs.is_prerelease == 'false'
     environment:
       name: pypi
       url: https://pypi.org/project/harborflow
@@ -279,25 +279,6 @@ jobs:
       - name: 发布到PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         # 使用 Trusted Publishing，不需要 repository-url
-
-  publish-pypi-token:
-    name: 发布到PyPI（令牌回退）
-    runs-on: ubuntu-latest
-    needs: [validate-version, create-release]
-    if: ${{ needs.validate-version.outputs.is_prerelease == 'false' && (secrets.PYPI_API_TOKEN != '') }}
-    environment:
-      name: pypi
-      url: https://pypi.org/project/harborflow
-    steps:
-      - name: 下载构建产物
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-packages
-          path: dist/
-      - name: 发布到PyPI（令牌）
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
 
   # 发布到TestPyPI（预发布版本）
   publish-test-pypi:
@@ -327,7 +308,7 @@ jobs:
     name: 部署文档
     runs-on: ubuntu-latest
     needs: [validate-version, create-release]
-    if: ${{ needs.validate-version.outputs.is_prerelease == 'false' && hashFiles('mkdocs.yml') != '' }}
+    if: needs.validate-version.outputs.is_prerelease == 'false'
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -338,14 +319,17 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           
       - name: 安装文档依赖
+        if: ${{ hashFiles('mkdocs.yml') != '' }}
         run: |
           pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin mkdocstrings[python]
           
       - name: 构建文档
+        if: ${{ hashFiles('mkdocs.yml') != '' }}
         run: |
           mkdocs build
           
       - name: 部署到GitHub Pages
+        if: ${{ hashFiles('mkdocs.yml') != '' }}
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
