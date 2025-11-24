@@ -13,6 +13,20 @@
 - Breaking: 否
 - Related: N/A
 
+- Date: 2025-11-24
+- Type: chore
+- Modules: `examples/advanced_features_demo.py`, `README.md`, `harborflow/__init__.py`, `pyproject.toml`
+- Summary: 发布 v0.1.3 版本，标准化所有 Route 返回格式，统一代码示例风格。
+- Reason: 提高代码一致性和可读性，为发布到 PyPI 做准备。
+- Changes:
+  - 更新版本号到 0.1.3（`pyproject.toml` 和 `harborflow/__init__.py`）。
+  - 标准化 `examples/advanced_features_demo.py` 中所有 Route 返回语句，统一使用 `Route(goto=..., update=...)` 格式。
+  - 更新 `README.md` 中的代码示例，保持一致的风格。
+  - 创建发布说明文档 `RELEASE_NOTES_v0.1.3.md`。
+  - 所有测试继续通过（14/14），功能完全保持向后兼容。
+- Breaking: 否
+- Related: PyPI 发布准备
+
 - Date: 2025-11-21
 - Type: chore
 - Modules: `harborflow/compile.py`, `harborflow/decorators.py`
@@ -23,6 +37,7 @@
   - `graph` Docstring 增补：注入的 `compile(self, **options)` 透传到 `compile_graph`，包含 `check`。
 - Breaking: 否
 - Related: N/A
+
 - Date: 2025-11-21
 - Type: chore
 - Modules: `tests/test_compile.py`, `tests/test_types.py`, `tests/conftest.py`, `requirements.txt`, `pyproject.toml`
@@ -34,4 +49,20 @@
   - 添加 `requirements.txt`：声明 `langgraph>=1.0.0` 与 `pytest>=7.0.0`。
   - 添加 `pyproject.toml`：声明项目基础信息与依赖（PEP 621）。
 - Breaking: 否
+- Related: N/A
+
+- Date: 2025-11-24
+- Type: feature
+- Modules: `harborflow/types.py`, `harborflow/decorators.py`, `harborflow/compile.py`, `harborflow/types_additions.py`, `harborflow/__init__.py`
+- Summary: 实现异步支持、类型注解修复、错误处理增强、状态验证、条件路由和并行执行等六大优化。
+- Reason: 响应用户需求，将 HarborFlow 升级为具备现代异步工作流引擎能力的完整框架。
+- Changes:
+  - **异步支持**：添加 `@node` 装饰器对异步函数的支持，创建 `compile_graph_async()` 和 `_wrap_node_async()`。
+  - **类型注解修复**：使用 `ParamSpec` 和 `TypeVar` 保持装饰器类型签名，确保类型安全。
+  - **错误处理增强**：创建 `NodeExecutionError` 和 `NodeConfig` 类，支持超时、重试和自定义错误处理。
+  - **状态验证**：实现 `validate_state_transition()` 函数，支持必需字段和不可变字段验证。
+  - **条件路由**：创建 `ConditionalRoute` 类，支持基于条件的动态路由和优先级系统。
+  - **并行执行**：创建 `@parallel_node` 装饰器，为并行执行框架奠定基础。
+  - 添加完整测试套件 `tests/test_async_features.py` 和功能演示 `examples/advanced_features_demo.py`。
+- Breaking: 否（保持完全向后兼容）
 - Related: N/A
