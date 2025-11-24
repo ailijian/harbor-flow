@@ -1,4 +1,4 @@
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 from .types import Route, END, HarborFlowError, ConfigError, NodeExecutionError, NodeConfig, validate_state_transition
 from .decorators import graph, node, parallel_node
